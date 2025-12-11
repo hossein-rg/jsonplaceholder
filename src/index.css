@@ -1,1 +1,21 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-background: 255 255 255;
+    --color-foreground: 248 250 252;
+    --color-text-primary: 17 24 39;
+    --color-text-secondary: 107 114 128;
+    --color-primary: 99 102 241;
+  }
+
+  .dark {
+    --color-background: 17 24 39;
+    --color-foreground: 31 41 55;
+    --color-text-primary: 229 231 235;
+    --color-text-secondary: 156 163 175;
+    --color-primary: 129 140 248;
+  }
+}
