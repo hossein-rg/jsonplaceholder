@@ -7,15 +7,26 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { ArrowUpDown } from 'lucide-react';
+import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react';
 import { useAppStore } from '@/store/useAppStore';
 import type { User } from '@/types/index';
-
+import { QueryErrorFallback } from '@/components/common/QueryErrorBoundary';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 interface UsersTableProps {
-    users: User[];
+    users: User[] | undefined;
+    isLoading: boolean;
+    isError: boolean;
+    error: Error | null;
+    onRefetch: () => void;
 }
 
-const UsersTable = ({ users }: UsersTableProps) => {
+const UsersTable = ({
+    users,
+    isLoading,
+    isError,
+    error,
+    onRefetch,
+}: UsersTableProps) => {
     const { setUserSort, userSortColumn, userSortDirection } = useAppStore();
 
     const renderSortIcon = (column: 'id' | 'name' | 'email' | 'username') => {
@@ -23,14 +34,14 @@ const UsersTable = ({ users }: UsersTableProps) => {
             return <ArrowUpDown className="ml-2 h-4 w-4 text-muted-foreground/50" />;
         }
         return userSortDirection === 'asc' ? (
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            <ArrowUp className="ml-2 h-4 w-4" />
         ) : (
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            <ArrowDown className="ml-2 h-4 w-4" />
         );
     };
 
     return (
-        <div className="rounded-md border overflow-x-auto">
+        <ScrollArea className="rounded-md h-fit border overflow-x-auto">
             <Table>
                 <TableHeader>
                     <TableRow>
@@ -57,25 +68,39 @@ const UsersTable = ({ users }: UsersTableProps) => {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {users?.length ? (
-                        users.map((user) => (
-                            <TableRow key={user.id}>
-                                <TableCell className="font-medium pl-5">{user.id}</TableCell>
-                                <TableCell>{user.name}</TableCell>
-                                <TableCell>{user.email}</TableCell>
-                                <TableCell>{user.username}</TableCell>
-                            </TableRow>
-                        ))
-                    ) : (
+                    {isLoading && (
                         <TableRow>
-                            <TableCell colSpan={4} className="h-24 text-center">
-                                No results.
+                            <TableCell colSpan={4} className="h-60 text-center text-muted-foreground">
+                                Loading...
                             </TableCell>
                         </TableRow>
                     )}
+                    {isError && (
+                        <TableRow>
+                            <TableCell colSpan={4}>
+                                <QueryErrorFallback error={error!} resetErrorBoundary={onRefetch} />
+                            </TableCell>
+                        </TableRow>
+                    )}
+                    {!isLoading && !isError && users?.length === 0 && (
+                        <TableRow>
+                            <TableCell colSpan={4} className="h-60 text-center text-muted-foreground">
+                                No results found.
+                            </TableCell>
+                        </TableRow>
+                    )}
+                    {!isLoading && !isError && users?.map((user) => (
+                        <TableRow key={user.id}>
+                            <TableCell className="font-medium pl-5">{user.id}</TableCell>
+                            <TableCell>{user.name}</TableCell>
+                            <TableCell>{user.email}</TableCell>
+                            <TableCell>{user.username}</TableCell>
+                        </TableRow>
+                    ))}
                 </TableBody>
             </Table>
-        </div>
+            <ScrollBar orientation='horizontal' />
+        </ScrollArea>
     );
 };
 

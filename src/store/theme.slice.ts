@@ -1,15 +1,32 @@
 import type { StateCreator } from 'zustand';
 
-export type Theme = 'light' | 'dark';
+type Theme = 'light' | 'dark';
 
 export interface ThemeSlice {
     theme: Theme;
     toggleTheme: () => void;
 }
-export const createThemeSlice: StateCreator<ThemeSlice> = (set) => ({
-    theme: 'light',
-    toggleTheme: () =>
-        set((state) => ({
-            theme: state.theme === 'light' ? 'dark' : 'light',
-        })),
-});
+
+const applyTheme = (theme: Theme) => {
+    const root = window.document.documentElement;
+    root.classList.remove('light', 'dark');
+    root.classList.add(theme);
+};
+
+export const createThemeSlice: StateCreator<ThemeSlice> = (set) => {
+    const storedTheme = localStorage.getItem('task-theme') as Theme;
+    const initialTheme = storedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    applyTheme(initialTheme);
+
+    return {
+        theme: initialTheme,
+        toggleTheme: () => {
+            set((state) => {
+                const newTheme = state.theme === 'light' ? 'dark' : 'light';
+                localStorage.setItem('task-theme', newTheme);
+                applyTheme(newTheme);
+                return { theme: newTheme };
+            });
+        },
+    };
+};

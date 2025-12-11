@@ -17,7 +17,7 @@ const Header = () => {
                     <Menu className="h-6 w-6" />
                 </Button>
 
-                <h1 className="text-lg font-bold text-amber-600 md:text-xl">Mini Task</h1>
+                <h1 className="text-lg font-bold text-orange-500/90 md:text-xl">Mini Task</h1>
                 <ThemeToggler />
             </div>
         </header>

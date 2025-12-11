@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react';
 import Header from './Header';
 import Sidebar from './SideBar';
 import { useAppStore } from '@/store/useAppStore';
-import { Sheet, SheetContent } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import Footer from './Footer';
 
 interface LayoutProps {
@@ -10,13 +9,7 @@ interface LayoutProps {
 }
 
 const Layout = ({ children }: LayoutProps) => {
-    const { theme, isSidebarOpen, toggleSidebar } = useAppStore();
-
-    useEffect(() => {
-        const root = window.document.documentElement;
-        root.classList.remove('light', 'dark');
-        root.classList.add(theme);
-    }, [theme]);
+    const { isSidebarOpen, toggleSidebar } = useAppStore();
 
     return (
         <div className="flex flex-grow min-h-screen flex-col bg-background text-foreground select-none">
@@ -27,6 +20,9 @@ const Layout = ({ children }: LayoutProps) => {
                 </div>
                 <Sheet open={isSidebarOpen} onOpenChange={toggleSidebar}>
                     <SheetContent side="left" className="w-[240px] p-0">
+                        <SheetHeader>
+                            <SheetTitle className="sr-only">Main Menu</SheetTitle>
+                        </SheetHeader>
                         <Sidebar />
                     </SheetContent>
                 </Sheet>

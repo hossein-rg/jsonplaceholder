@@ -1,23 +1,15 @@
 import { Input } from '@/components/ui/input';
-import { useAppStore } from '@/store/useAppStore';
 import { useDebouncedCallback } from 'use-debounce';
 
-const PostFilters = () => {
-    const setPostFilter = useAppStore((state) => state.setPostFilter);
+interface PostFiltersProps {
+    onFilterChange: (value: string) => void;
+    initialValue?: string;
+}
 
+const PostFilters = ({ onFilterChange, initialValue }: PostFiltersProps) => {
     const debounced = useDebouncedCallback((value) => {
-        setPostFilter(value);
-    }, 500);
-
-    return (
-        <div className="flex items-center">
-            <Input
-                placeholder="Filter by title or body..."
-                onChange={(e) => debounced(e.target.value)}
-                className="max-w-sm"
-            />
-        </div>
-    );
+        onFilterChange(value);
+    }, 800);
+    return <Input className="max-w-sm" placeholder="Filter by title or body..." defaultValue={initialValue} onChange={(e) => debounced(e.target.value)} />
 };
-
 export default PostFilters;

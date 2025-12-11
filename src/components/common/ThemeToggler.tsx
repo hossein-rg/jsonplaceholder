@@ -1,16 +1,22 @@
-import { useAppStore } from '../../store/useAppStore';
+import { useAppStore } from '@/store/useAppStore';
 import { Sun, Moon } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const ThemeToggler = () => {
     const { theme, toggleTheme } = useAppStore();
     return (
-        <button
+        <Button
+            variant="outline"
+            size="icon"
             onClick={toggleTheme}
-            className="rounded-full p-2 text-text-primary transition-colors hover:bg-accent"
             aria-label="Toggle theme"
         >
-            {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
-        </button>
+            {theme === 'light' ? (
+                <Moon className="w-5 h-5" />
+            ) : (
+                <Sun className="w-5 h-5" />
+            )}
+        </Button>
     );
 };
 

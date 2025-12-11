@@ -15,7 +15,7 @@ export const createPostsSlice: StateCreator<PostsSlice> = (set, get) => ({
     postSortColumn: 'id',
     postSortDirection: 'asc',
     setPostFilter: (filter) => {
-        set({ postFilter: filter, postPage: 1 });
+        set({ postFilter: filter });
     },
     setPostSort: (column) => {
         const { postSortColumn, postSortDirection } = get();
