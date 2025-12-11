@@ -1,15 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Header from './Header';
-import Footer from './Footer';
 import Sidebar from './SideBar';
-import { useAppStore } from '../../store/useAppStore';
-import { useEffect } from 'react';
+import { useAppStore } from '@/store/useAppStore';
+import { Sheet, SheetContent } from '@/components/ui/sheet';
+import Footer from './Footer';
+
 interface LayoutProps {
     children: React.ReactNode;
 }
 
 const Layout = ({ children }: LayoutProps) => {
-    const theme = useAppStore((state) => state.theme);
+    const { theme, isSidebarOpen, toggleSidebar } = useAppStore();
+
     useEffect(() => {
         const root = window.document.documentElement;
         root.classList.remove('light', 'dark');
@@ -17,13 +19,19 @@ const Layout = ({ children }: LayoutProps) => {
     }, [theme]);
 
     return (
-        <div className="flex flex-col min-h-screen">
+        <div className="flex flex-grow min-h-screen flex-col bg-background text-foreground">
             <Header />
-            <div className='flex flex-1'>
-                <Sidebar />
-                <main className="grow container bg-background mx-auto p-4">
-                    {children}
-                </main>
+            <div className="flex flex-1">
+                <div className="hidden sm:block">
+                    <Sidebar />
+                </div>
+                <Sheet open={isSidebarOpen} onOpenChange={toggleSidebar}>
+                    <SheetContent side="left" className="w-[240px] p-0 pt-10">
+                        <Sidebar />
+                    </SheetContent>
+                </Sheet>
+
+                <main className="flex-grow p-4 md:p-6 min-w-0">{children}</main>
             </div>
             <Footer />
         </div>

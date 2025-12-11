@@ -1,16 +1,13 @@
 import { NavLink } from 'react-router-dom';
-
 const Sidebar = () => {
     const getNavLinkClass = ({ isActive }: { isActive: boolean }) => {
         const baseClasses = 'block rounded-md p-2 transition-colors';
-        const activeClasses = 'bg-primary text-white';
-        const inactiveClasses = 'text-text-secondary hover:bg-background hover:text-text-primary';
-
+        const activeClasses = 'bg-primary text-primary-foreground';
+        const inactiveClasses = 'text-muted-foreground hover:bg-accent hover:text-accent-foreground';
         return `${baseClasses} ${isActive ? activeClasses : inactiveClasses}`;
     };
-
     return (
-        <aside className="w-60 shrink-0 bg-foreground p-4">
+        <aside className="w-60 shrink-0 bg-muted/50 border-r border-border p-4">
             <nav>
                 <ul className="flex flex-col space-y-2">
                     <li>

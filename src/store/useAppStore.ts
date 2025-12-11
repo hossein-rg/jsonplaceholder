@@ -1,7 +1,11 @@
 import { create } from 'zustand';
 import { type ThemeSlice, createThemeSlice } from './theme.slice';
-type AppState = ThemeSlice;
+import { type UsersSlice, createUsersSlice } from './users.slice';
+import { type SidebarSlice, createSidebarSlice } from './sidebar.slice';
+type AppState = ThemeSlice & UsersSlice & SidebarSlice;
 
 export const useAppStore = create<AppState>()((...a) => ({
     ...createThemeSlice(...a),
+    ...createUsersSlice(...a),
+    ...createSidebarSlice(...a),
 }));
