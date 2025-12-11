@@ -11,7 +11,7 @@ const Header = () => {
                 <Button
                     variant="ghost"
                     size="icon"
-                    className="sm:hidden"
+                    className="md:hidden"
                     onClick={() => toggleSidebar(true)}
                 >
                     <Menu className="h-6 w-6" />

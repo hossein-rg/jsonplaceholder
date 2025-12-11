@@ -19,18 +19,17 @@ const Layout = ({ children }: LayoutProps) => {
     }, [theme]);
 
     return (
-        <div className="flex flex-grow min-h-screen flex-col bg-background text-foreground">
+        <div className="flex flex-grow min-h-screen flex-col bg-background text-foreground select-none">
             <Header />
             <div className="flex flex-1">
-                <div className="hidden sm:block">
+                <div className="hidden md:block">
                     <Sidebar />
                 </div>
                 <Sheet open={isSidebarOpen} onOpenChange={toggleSidebar}>
-                    <SheetContent side="left" className="w-[240px] p-0 pt-10">
+                    <SheetContent side="left" className="w-[240px] p-0">
                         <Sidebar />
                     </SheetContent>
                 </Sheet>
-
                 <main className="flex-grow p-4 md:p-6 min-w-0">{children}</main>
             </div>
             <Footer />

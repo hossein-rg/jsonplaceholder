@@ -25,7 +25,7 @@ const UsersTable = ({ users }: UsersTableProps) => {
         return userSortDirection === 'asc' ? (
             <ArrowUpDown className="ml-2 h-4 w-4" />
         ) : (
-            <ArrowUpDown className="ml-2 h-4 w-4" /> // Lucide has one icon, you can use custom ones
+            <ArrowUpDown className="ml-2 h-4 w-4" />
         );
     };
 
@@ -34,7 +34,7 @@ const UsersTable = ({ users }: UsersTableProps) => {
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead className="w-[100px]">
+                        <TableHead className="w-[80px] p-0">
                             <Button variant="ghost" onClick={() => setUserSort('id')}>
                                 ID {renderSortIcon('id')}
                             </Button>
@@ -60,7 +60,7 @@ const UsersTable = ({ users }: UsersTableProps) => {
                     {users?.length ? (
                         users.map((user) => (
                             <TableRow key={user.id}>
-                                <TableCell className="font-medium">{user.id}</TableCell>
+                                <TableCell className="font-medium pl-5">{user.id}</TableCell>
                                 <TableCell>{user.name}</TableCell>
                                 <TableCell>{user.email}</TableCell>
                                 <TableCell>{user.username}</TableCell>

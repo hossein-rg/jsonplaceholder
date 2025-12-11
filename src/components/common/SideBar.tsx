@@ -7,7 +7,7 @@ const Sidebar = () => {
         return `${baseClasses} ${isActive ? activeClasses : inactiveClasses}`;
     };
     return (
-        <aside className="w-60 h-full shrink-0 bg-muted/50 border-r border-border p-4">
+        <aside className="w-60 pt-14 h-full shrink-0 bg-muted/50 border-r border-border p-4">
             <nav>
                 <ul className="flex flex-col space-y-2">
                     <li>

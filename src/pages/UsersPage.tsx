@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import {
     Pagination,
     PaginationContent,
@@ -60,7 +60,6 @@ const UsersPage = () => {
                 <PaginationContent>
                     <PaginationItem>
                         <PaginationPrevious
-                            href="#"
                             onClick={() => handlePageChange(userPage - 1)}
                             className={userPage <= 1 ? 'pointer-events-none opacity-50' : undefined}
                         />
@@ -72,7 +71,6 @@ const UsersPage = () => {
                     </PaginationItem>
                     <PaginationItem>
                         <PaginationNext
-                            href="#"
                             onClick={() => handlePageChange(userPage + 1)}
                             className={userPage >= totalPages ? 'pointer-events-none opacity-50' : undefined}
                         />

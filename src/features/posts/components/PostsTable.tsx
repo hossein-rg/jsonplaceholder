@@ -10,7 +10,13 @@ import { Button } from '@/components/ui/button';
 import { ArrowUpDown } from 'lucide-react';
 import { useAppStore } from '@/store/useAppStore';
 import type { Post } from '@/types/index';
-
+import { ScrollBar, ScrollArea } from '@/components/ui/scroll-area';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from '@/components/ui/tooltip';
 interface PostsTableProps {
     posts: Post[];
 }
@@ -19,11 +25,11 @@ const PostsTable = ({ posts }: PostsTableProps) => {
     const { setPostSort } = useAppStore();
 
     return (
-        <div className="rounded-md border overflow-x-auto">
+        <ScrollArea className="rounded-md border">
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead className="w-[100px]">
+                        <TableHead className="w-[80px] p-0">
                             <Button variant="ghost" onClick={() => setPostSort('id')}>
                                 ID <ArrowUpDown className="ml-2 h-4 w-4" />
                             </Button>
@@ -43,14 +49,15 @@ const PostsTable = ({ posts }: PostsTableProps) => {
                 <TableBody>
                     {posts?.map((post) => (
                         <TableRow key={post.id}>
-                            <TableCell className="font-medium">{post.id}</TableCell>
-                            <TableCell>{post.title}</TableCell>
-                            <TableCell className="truncate max-w-xs">{post.body}</TableCell>
+                            <TableCell className="font-medium pl-5">{post.id}</TableCell>
+                            <TableCell className='max-w-xs'>{post.title}</TableCell>
+                            <TableCell className="max-w-lg">{post.body}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
             </Table>
-        </div>
+            <ScrollBar orientation='horizontal' />
+        </ScrollArea>
     );
 };
 

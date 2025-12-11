@@ -8,19 +8,20 @@ import {
 import PostFilters from '@/features/posts/components/PostFilters';
 import PostsTable from '@/features/posts/components/PostsTable';
 import { useGetPosts } from '@/features/posts/hooks/useGetPosts';
-import { useAppStore } from '@/store/useAppStore';
-
+import { useSearchParams } from 'react-router-dom';
 const POSTS_PER_PAGE = 10;
 
 const PostsPage = () => {
     const { data, isLoading, isError, isFetching } = useGetPosts();
-    const { postPage, setPostPage } = useAppStore();
-
+    const [searchParams, setSearchParams] = useSearchParams();
+    const postPage = parseInt(searchParams.get('page') || '1', 10);
     const totalPages = Math.ceil((data?.totalCount || 0) / POSTS_PER_PAGE);
-
-    const handlePageChange = (page: number) => {
-        if (page > 0 && page <= totalPages) {
-            setPostPage(page);
+    const handlePageChange = (newPage: number) => {
+        if (newPage > 0 && newPage <= totalPages) {
+            setSearchParams((prev) => {
+                prev.set('page', newPage.toString());
+                return prev;
+            });
         }
     };
 
@@ -42,7 +43,6 @@ const PostsPage = () => {
                 <PaginationContent>
                     <PaginationItem>
                         <PaginationPrevious
-                            href="#"
                             onClick={() => handlePageChange(postPage - 1)}
                             className={postPage <= 1 ? 'pointer-events-none opacity-50' : undefined}
                         />
@@ -54,7 +54,6 @@ const PostsPage = () => {
                     </PaginationItem>
                     <PaginationItem>
                         <PaginationNext
-                            href="#"
                             onClick={() => handlePageChange(postPage + 1)}
                             className={postPage >= totalPages ? 'pointer-events-none opacity-50' : undefined}
                         />
