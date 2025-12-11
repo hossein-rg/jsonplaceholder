@@ -1,42 +1,61 @@
+import React, { useMemo } from 'react';
 import {
     Pagination,
     PaginationContent,
-    PaginationEllipsis,
     PaginationItem,
-    PaginationLink,
     PaginationNext,
     PaginationPrevious,
 } from '@/components/ui/pagination';
 import UsersTable from '@/features/users/components/UsersTable';
+import UserFilters from '@/features/users/components/UserFilters';
 import { useGetUsers } from '@/features/users/hooks/useGetUsers';
 import { useAppStore } from '@/store/useAppStore';
-
 const USERS_PER_PAGE = 10;
 
 const UsersPage = () => {
-    const { data, isLoading, isError, isFetching } = useGetUsers();
-    const { userPage, setUserPage } = useAppStore();
+    const { data: allUsers, isLoading, isError } = useGetUsers();
+    const { userPage, setUserPage, userFilter, userSortColumn, userSortDirection } = useAppStore();
+    const processedData = useMemo(() => {
+        if (!allUsers) return { paginatedUsers: [], totalPages: 0 };
+        // filter
+        const filteredUsers = allUsers.filter(user =>
+            user.name.toLowerCase().includes(userFilter.toLowerCase()) ||
+            user.email.toLowerCase().includes(userFilter.toLowerCase()) ||
+            user.username.toLowerCase().includes(userFilter.toLowerCase())
+        );
+        // sort
+        const sortedUsers = [...filteredUsers].sort((a, b) => {
+            const aValue = a[userSortColumn];
+            const bValue = b[userSortColumn];
+            if (aValue < bValue) return userSortDirection === 'asc' ? -1 : 1;
+            if (aValue > bValue) return userSortDirection === 'asc' ? 1 : -1;
+            return 0;
+        });
+        // pagination
+        const totalPages = Math.ceil(sortedUsers.length / USERS_PER_PAGE);
+        const startIndex = (userPage - 1) * USERS_PER_PAGE;
+        const paginatedUsers = sortedUsers.slice(startIndex, startIndex + USERS_PER_PAGE);
 
-    const totalPages = Math.ceil((data?.totalCount || 0) / USERS_PER_PAGE);
+        return { paginatedUsers, totalPages };
+    }, [allUsers, userFilter, userSortColumn, userSortDirection, userPage]);
+
+    const { paginatedUsers, totalPages } = processedData;
 
     const handlePageChange = (page: number) => {
         if (page > 0 && page <= totalPages) {
             setUserPage(page);
         }
-    };
+    }
 
+    if (isLoading) return <div className="text-center text-muted-foreground">Loading initial data...</div>;
+    if (isError) return <div className="text-center text-destructive">Error fetching data.</div>;
     return (
         <div className="space-y-6">
             <div className="flex items-center justify-between">
                 <h2 className="text-3xl font-bold text-foreground">Users</h2>
-                {isFetching && <div className="text-muted-foreground">Updating...</div>}
             </div>
-
-            {isLoading && <div className="text-center text-muted-foreground">Loading users...</div>}
-            {isError && <div className="text-center text-destructive">Error fetching data.</div>}
-
-            {data && <UsersTable users={data.data} />}
-
+            <UserFilters />
+            <UsersTable users={paginatedUsers} />
             <Pagination>
                 <PaginationContent>
                     <PaginationItem>

@@ -6,6 +6,9 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+import { Button } from '@/components/ui/button';
+import { ArrowUpDown } from 'lucide-react';
+import { useAppStore } from '@/store/useAppStore';
 import type { User } from '@/types/index';
 
 interface UsersTableProps {
@@ -13,16 +16,44 @@ interface UsersTableProps {
 }
 
 const UsersTable = ({ users }: UsersTableProps) => {
+    const { setUserSort, userSortColumn, userSortDirection } = useAppStore();
+
+    const renderSortIcon = (column: 'id' | 'name' | 'email' | 'username') => {
+        if (userSortColumn !== column) {
+            return <ArrowUpDown className="ml-2 h-4 w-4 text-muted-foreground/50" />;
+        }
+        return userSortDirection === 'asc' ? (
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+        ) : (
+            <ArrowUpDown className="ml-2 h-4 w-4" /> // Lucide has one icon, you can use custom ones
+        );
+    };
+
     return (
-        // فقط کلاس `overflow-x-auto` به اینجا اضافه شده است
         <div className="rounded-md border overflow-x-auto">
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead className="w-[100px]">ID</TableHead>
-                        <TableHead>Name</TableHead>
-                        <TableHead>Email</TableHead>
-                        <TableHead>Company</TableHead>
+                        <TableHead className="w-[100px]">
+                            <Button variant="ghost" onClick={() => setUserSort('id')}>
+                                ID {renderSortIcon('id')}
+                            </Button>
+                        </TableHead>
+                        <TableHead>
+                            <Button variant="ghost" onClick={() => setUserSort('name')}>
+                                Name {renderSortIcon('name')}
+                            </Button>
+                        </TableHead>
+                        <TableHead>
+                            <Button variant="ghost" onClick={() => setUserSort('email')}>
+                                Email {renderSortIcon('email')}
+                            </Button>
+                        </TableHead>
+                        <TableHead>
+                            <Button variant="ghost" onClick={() => setUserSort('username')}>
+                                Username {renderSortIcon('username')}
+                            </Button>
+                        </TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -32,7 +63,7 @@ const UsersTable = ({ users }: UsersTableProps) => {
                                 <TableCell className="font-medium">{user.id}</TableCell>
                                 <TableCell>{user.name}</TableCell>
                                 <TableCell>{user.email}</TableCell>
-                                <TableCell>{user.company.name}</TableCell>
+                                <TableCell>{user.username}</TableCell>
                             </TableRow>
                         ))
                     ) : (
