@@ -5,14 +5,13 @@ import { Button } from '@/components/ui/button';
 
 const Header = () => {
     const toggleSidebar = useAppStore((state) => state.toggleSidebar);
-
     return (
         <header className="border-b border-border bg-background shadow-sm">
             <div className="container mx-auto flex items-center justify-between p-2 md:p-4">
                 <Button
                     variant="ghost"
                     size="icon"
-                    className="sm:hidden focus:ring-0 focus:p-0"
+                    className="sm:hidden"
                     onClick={() => toggleSidebar(true)}
                 >
                     <Menu className="h-6 w-6" />
